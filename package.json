@@ -4,7 +4,7 @@
   "description": "Es parte de la practica de codigo backend",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/sebascardozo/primer_desafio_backend/issues"
   },
-  "homepage": "https://github.com/sebascardozo/primer_desafio_backend#readme"
+  "homepage": "https://github.com/sebascardozo/primer_desafio_backend#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
 }
