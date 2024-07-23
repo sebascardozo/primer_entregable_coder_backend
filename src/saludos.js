@@ -1,5 +1,5 @@
 const temprano = () => {
-  console.log("Buenos dias");
+  console.log("Buenos dia");
 };
 
 const tarde = () => {
