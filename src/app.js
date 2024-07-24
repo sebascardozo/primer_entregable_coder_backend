@@ -5,7 +5,7 @@ const app = express();
 const PUERTO = 8080;
 
 const ProductManager = require("./managers/product-manager.js");
-const manager = new ProductManager("./src/data/productos.json");
+const manager = new ProductManager("./src/data/products.json");
 
 //Middleware:
 app.use(express.json());
