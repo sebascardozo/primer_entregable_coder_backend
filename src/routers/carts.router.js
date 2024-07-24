@@ -40,5 +40,21 @@ class CartManager {
     await this.saveCart();
     return newCart;
   }
+
+  //Retorne un carrito por id:
+  async getCartById(cartId) {
+    try {
+      const cart = this.carts.find((c) => c.id === cartld);
+
+      if (!cart) {
+        throw new Error("No existe un carrito con ese id");
+      }
+      return cart;
+    } catch (error) {
+      console.log("Error al obtener el carrito por id");
+      throw error;
+    }
+  }
 }
-nodule.exports = CantManager;
+
+module.exports = CartManager;
