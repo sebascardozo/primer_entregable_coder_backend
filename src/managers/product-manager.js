@@ -101,6 +101,7 @@ class ProductManager {
     }
   }
 
+  //Método para eliminar productos:
   async deleteProduct(id) {
     try {
       const arrayProductos = await this.readFile();
