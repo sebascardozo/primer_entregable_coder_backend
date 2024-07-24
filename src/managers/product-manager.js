@@ -17,14 +17,12 @@ class ProductManager {
     //2) Validacion:
 
     if (this.products.some((item) => item.code === code)) {
-      console.log(
-        "El codigo debe ser unico.. o el tutor te hace la desaprobacion"
-      );
+      console.log("El codigo debe ser unico.. o todos moriremos");
       return;
     }
 
     //3) Crear el producto, pero que tenga el id autoincrementable.
-    const newProduct = {
+    const nuevoProducto = {
       id: ++ProductManager.ultId,
       title,
       description,
@@ -35,15 +33,15 @@ class ProductManager {
     };
 
     //4) Metemos el producto al array.
-    this.products.push(newProduct);
+    this.products.push(nuevoProducto);
 
     //5) Lo guardamos en el archivo:
-    await this.saveProduct(this.products);
+    await this.guardarArchivo(this.products);
   }
 
   async getProducts() {
     try {
-      const arrayProductos = await this.readFile();
+      const arrayProductos = await this.leerArchivo();
       return arrayProductos;
     } catch (error) {
       console.log("Error al leer el archivo", error);
@@ -52,7 +50,7 @@ class ProductManager {
 
   async getProductById(id) {
     try {
-      const arrayProductos = await this.readFile();
+      const arrayProductos = await this.leerArchivo();
       const buscado = arrayProductos.find((item) => item.id === id);
 
       if (!buscado) {
@@ -68,13 +66,13 @@ class ProductManager {
   }
 
   //Métodos auxiliares:
-  async readFile() {
+  async leerArchivo() {
     const respuesta = await fs.readFile(this.path, "utf-8");
     const arrayProductos = JSON.parse(respuesta);
     return arrayProductos;
   }
 
-  async saveFile(arrayProductos) {
+  async guardarArchivo(arrayProductos) {
     await fs.writeFile(this.path, JSON.stringify(arrayProductos, null, 2));
   }
 
@@ -82,7 +80,7 @@ class ProductManager {
 
   async updateProduct(id, productoActualizado) {
     try {
-      const arrayProductos = await this.readFile();
+      const arrayProductos = await this.writeFile();
 
       const index = arrayProductos.findIndex((item) => item.id === id);
 
@@ -101,10 +99,9 @@ class ProductManager {
     }
   }
 
-  //Método para eliminar productos:
   async deleteProduct(id) {
     try {
-      const arrayProductos = await this.readFile();
+      const arrayProductos = await this.writeFile();
 
       const index = arrayProductos.findIndex((item) => item.id === id);
 
