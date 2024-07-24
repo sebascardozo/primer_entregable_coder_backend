@@ -1,20 +1,61 @@
 const express = require("express");
 const ProductManager = require("../managers/product-manager.js");
-const manager = new ProductManager("./src/data/products.json");
+const manager = new ProductManager("../src/data/products.json");
 const router = express.Router();
 
 //Rutas
 
 //Listar todos los productos:
+//http://localhost:8080/api/products?limit=2
 
-router.get("/products", async (req, res) => {
-  const arrayProductos = await manager.getProducts();
-  res.send(arrayProductos);
+router.get("/", async (req, res) => {
+  const limit = req.query.limit;
+  try {
+    const arrayProductos = await manager.getProducts();
+    if (limit) {
+      res.send(arrayProductos.slice(0, limit));
+    } else {
+      res.send(arrayProductos);
+    }
+  } catch (error) {
+    res.status(500).send("Error interno del servidor");
+  }
 });
 
 //Buscar producto por id:
 
-router.get("/products/:pid", async (req, res) => {
+router.get("/:pid", async (req, res) => {
+  let id = req.params.pid;
+  try {
+    const producto = await manager.getProductById(parseInt(id));
+
+    if (!producto) {
+      res.send("Producto no encontrado");
+    } else {
+      res.send(producto);
+    }
+  } catch (error) {
+    res.send("Error al buscar ese id en los productos");
+  }
+});
+
+//Agregar nuevo producto:
+
+router.post("/", async (req, res) => {
+  const nuevoProducto = req.body;
+
+  try {
+    await manager.addProduct(nuevoProducto);
+
+    res.status(201).send("Producto agregado exitosamente");
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+});
+
+//Buscar producto por id:
+
+router.get("/:pid", async (req, res) => {
   let id = req.params.pid;
   try {
     const product = await manager.getProductById(parseInt(id));
@@ -46,13 +87,13 @@ const clientes = [
 
 //Metodo GET, me permite obtener registros:
 
-app.get("/clientes", (req, res) => {
+router.get("/", (req, res) => {
   res.send(clientes);
 });
 
 //Metodo GET, recupero un cliente por id:
 
-app.get("/clientes/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   let id = req.params.id;
   let clienteBuscado = clientes.find((cliente) => cliente.id === id);
 
@@ -65,7 +106,7 @@ app.get("/clientes/:id", (req, res) => {
 
 //Metodo POST, me permite enviar registros
 
-app.post("/clientes", (req, res) => {
+router.post("/", (req, res) => {
   const clienteNuevo = req.body;
   //Recupero el dato que me envia el cliente desde un formulario. Todo esto viaja en el objeto request, propiedad body.
 
@@ -79,7 +120,7 @@ app.post("/clientes", (req, res) => {
 
 //Metodo PUT, me permite actualizar un registro.
 
-app.put("/clientes/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const { id } = req.params;
   const { nombre, apellido } = req.body;
 
@@ -99,7 +140,7 @@ app.put("/clientes/:id", (req, res) => {
 
 //Metodo DELETE, eliminamos a TinkiWinki:
 
-app.delete("/clientes/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const { id } = req.params;
 
   //Tengo que buscar el indice que corresponde a este ID:

@@ -55,6 +55,18 @@ class CartManager {
       throw error;
     }
   }
-}
 
+  // ingresar productos al carrito:
+  async addCartId(cartld, productld, quantity = 1) {
+    const cart = await this.getCartById(cartId);
+    const existProduct = cart.products.find((p.product = productId));
+    if (existProduct) {
+      existProduct.quantity = quantity;
+    } else {
+      cart.products.push({ product: productld, quantity });
+    }
+    await this.saveCart();
+    return cart;
+  }
+}
 module.exports = CartManager;
