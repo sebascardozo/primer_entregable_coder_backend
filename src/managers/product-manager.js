@@ -24,7 +24,7 @@ class ProductManager {
     }
 
     //3) Crear el producto, pero que tenga el id autoincrementable.
-    const nuevoProducto = {
+    const newProduct = {
       id: ++ProductManager.ultId,
       title,
       description,
@@ -35,15 +35,15 @@ class ProductManager {
     };
 
     //4) Metemos el producto al array.
-    this.products.push(nuevoProducto);
+    this.products.push(newProduct);
 
     //5) Lo guardamos en el archivo:
-    await this.guardarArchivo(this.products);
+    await this.saveProduct(this.products);
   }
 
   async getProducts() {
     try {
-      const arrayProductos = await this.leerArchivo();
+      const arrayProductos = await this.readFile();
       return arrayProductos;
     } catch (error) {
       console.log("Error al leer el archivo", error);
@@ -52,7 +52,7 @@ class ProductManager {
 
   async getProductById(id) {
     try {
-      const arrayProductos = await this.leerArchivo();
+      const arrayProductos = await this.readFile();
       const buscado = arrayProductos.find((item) => item.id === id);
 
       if (!buscado) {
@@ -68,13 +68,13 @@ class ProductManager {
   }
 
   //Métodos auxiliares:
-  async leerArchivo() {
+  async readFile() {
     const respuesta = await fs.readFile(this.path, "utf-8");
     const arrayProductos = JSON.parse(respuesta);
     return arrayProductos;
   }
 
-  async guardarArchivo(arrayProductos) {
+  async saveFile(arrayProductos) {
     await fs.writeFile(this.path, JSON.stringify(arrayProductos, null, 2));
   }
 
@@ -82,7 +82,7 @@ class ProductManager {
 
   async updateProduct(id, productoActualizado) {
     try {
-      const arrayProductos = await this.leerArchivo();
+      const arrayProductos = await this.readFile();
 
       const index = arrayProductos.findIndex((item) => item.id === id);
 
@@ -91,7 +91,7 @@ class ProductManager {
           ...arrayProductos[index],
           ...productoActualizado,
         };
-        await this.guardarArchivo(arrayProductos);
+        await this.saveFile(arrayProductos);
         console.log("Producto actualizado");
       } else {
         console.log("No se encuentra el producto");
@@ -103,13 +103,13 @@ class ProductManager {
 
   async deleteProduct(id) {
     try {
-      const arrayProductos = await this.leerArchivo();
+      const arrayProductos = await this.readFile();
 
       const index = arrayProductos.findIndex((item) => item.id === id);
 
       if (index !== -1) {
         arrayProductos.splice(index, 1);
-        await this.guardarArchivo(arrayProductos);
+        await this.saveFile(arrayProductos);
         console.log("Producto eliminado");
       } else {
         console.log("No se encuentra el producto");
