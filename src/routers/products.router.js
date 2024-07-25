@@ -29,4 +29,17 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
+//Metodo Delete para eliminar productos
+
+router.delete("/:pid", async (req, res) => {
+  let pid = req.params.pid;
+  try {
+    await ProductManager.deleteProduct(pid);
+    res.send("Producto Eliminado");
+  } catch (error) {
+    res.send("Error al eliminar producto");
+    console.log(error);
+  }
+});
+
 module.exports = router;
