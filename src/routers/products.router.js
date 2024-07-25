@@ -27,6 +27,25 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
+//Metodo Post para transferir informacion
+router.post("/", async (req, res) => {
+  try {
+    const { title, description, price, img, code, stock } = req.body;
+    const response = await productManager.updateProduct([
+      title,
+      description,
+      price,
+      img,
+      code,
+      stock,
+    ]);
+    res.json(response);
+  } catch (error) {
+    res.send("Error al crear producto");
+    console.log(error);
+  }
+});
+
 //Metodo Delete para eliminar productos
 
 router.delete("/:pid", async (req, res) => {
