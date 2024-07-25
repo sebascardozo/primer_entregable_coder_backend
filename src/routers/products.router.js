@@ -5,18 +5,11 @@ const manager = new ProductManager("./src/data/products.json");
 
 //Listar todos los productos:
 
+//Listar todos los productos:
+
 router.get("/", async (req, res) => {
-  const limit = req.query.limit;
-  try {
-    const arrayProducts = await manager.getProducts();
-    if (limit) {
-      res.send(arrayProducts.slice(0, limit));
-    } else {
-      res.send(arrayProducts);
-    }
-  } catch (error) {
-    res.status(500).send("Error interno del servidor");
-  }
+  const arrayProducts = await manager.getProducts();
+  res.send(arrayProducts);
 });
 
 //Buscar producto por id:

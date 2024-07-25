@@ -51,7 +51,7 @@ class ProductManager {
   async getProductById(id) {
     try {
       const arrayProducts = await this.readFile();
-      const buscado = arrayProducts.find((item) => item.id === id);
+      const find = arrayProducts.find((item) => item.id === id);
 
       if (!find) {
         console.log("producto no encontrado");
@@ -67,18 +67,18 @@ class ProductManager {
 
   //Métodos auxiliares:
   async readFile() {
-    const respuesta = await fs.readFile(this.path, "utf-8");
-    const arrayProducts = JSON.parse(respuesta);
+    const answer = await fs.readFile(this.path, "utf-8");
+    const arrayProducts = JSON.parse(answer);
     return arrayProducts;
   }
 
-  async guardarArchivo(arrayProducts) {
+  async saveFile(arrayProducts) {
     await fs.writeFile(this.path, JSON.stringify(arrayProducts, null, 2));
   }
 
   //Método para actualizar productos:
 
-  async updateProduct(id, productoActualizado) {
+  async updateProduct(id, updateProduct) {
     try {
       const arrayProducts = await this.writeFile();
 
@@ -87,7 +87,7 @@ class ProductManager {
       if (index !== -1) {
         arrayProducts[index] = {
           ...arrayProducts[index],
-          ...productoActualizado,
+          ...updateProduct,
         };
         await this.saveFile(arrayProducts);
         console.log("Producto actualizado");
