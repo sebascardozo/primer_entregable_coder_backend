@@ -22,7 +22,7 @@ class ProductManager {
     }
 
     //3) Crear el producto, pero que tenga el id autoincrementable.
-    const nuevoProducto = {
+    const newProduct = {
       id: ++ProductManager.ultId,
       title,
       description,
@@ -33,16 +33,16 @@ class ProductManager {
     };
 
     //4) Metemos el producto al array.
-    this.products.push(nuevoProducto);
+    this.products.push(newProduct);
 
     //5) Lo guardamos en el archivo:
-    await this.guardarArchivo(this.products);
+    await this.saveFile(this.products);
   }
 
   async getProducts() {
     try {
-      const arrayProductos = await this.leerArchivo();
-      return arrayProductos;
+      const arrayProducts = await this.readFile();
+      return arrayProducts;
     } catch (error) {
       console.log("Error al leer el archivo", error);
     }
@@ -50,15 +50,15 @@ class ProductManager {
 
   async getProductById(id) {
     try {
-      const arrayProductos = await this.leerArchivo();
-      const buscado = arrayProductos.find((item) => item.id === id);
+      const arrayProducts = await this.readFile();
+      const buscado = arrayProducts.find((item) => item.id === id);
 
-      if (!buscado) {
+      if (!find) {
         console.log("producto no encontrado");
         return null;
       } else {
         console.log("Producto encontrado");
-        return buscado;
+        return find;
       }
     } catch (error) {
       console.log("Error al buscar por id", error);
@@ -66,30 +66,30 @@ class ProductManager {
   }
 
   //Métodos auxiliares:
-  async leerArchivo() {
+  async readFile() {
     const respuesta = await fs.readFile(this.path, "utf-8");
-    const arrayProductos = JSON.parse(respuesta);
-    return arrayProductos;
+    const arrayProducts = JSON.parse(respuesta);
+    return arrayProducts;
   }
 
-  async guardarArchivo(arrayProductos) {
-    await fs.writeFile(this.path, JSON.stringify(arrayProductos, null, 2));
+  async guardarArchivo(arrayProducts) {
+    await fs.writeFile(this.path, JSON.stringify(arrayProducts, null, 2));
   }
 
   //Método para actualizar productos:
 
   async updateProduct(id, productoActualizado) {
     try {
-      const arrayProductos = await this.writeFile();
+      const arrayProducts = await this.writeFile();
 
-      const index = arrayProductos.findIndex((item) => item.id === id);
+      const index = arrayProducts.findIndex((item) => item.id === id);
 
       if (index !== -1) {
-        arrayProductos[index] = {
-          ...arrayProductos[index],
+        arrayProducts[index] = {
+          ...arrayProducts[index],
           ...productoActualizado,
         };
-        await this.saveFile(arrayProductos);
+        await this.saveFile(arrayProducts);
         console.log("Producto actualizado");
       } else {
         console.log("No se encuentra el producto");
@@ -101,13 +101,13 @@ class ProductManager {
 
   async deleteProduct(id) {
     try {
-      const arrayProductos = await this.writeFile();
+      const arrayProducts = await this.writeFile();
 
-      const index = arrayProductos.findIndex((item) => item.id === id);
+      const index = arrayProducts.findIndex((item) => item.id === id);
 
       if (index !== -1) {
-        arrayProductos.splice(index, 1);
-        await this.saveFile(arrayProductos);
+        arrayProducts.splice(index, 1);
+        await this.saveFile(arrayProducts);
         console.log("Producto eliminado");
       } else {
         console.log("No se encuentra el producto");

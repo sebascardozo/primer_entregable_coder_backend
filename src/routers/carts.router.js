@@ -3,7 +3,7 @@ const router = express.Router();
 const CartManager = require("../managers/cart-manager.js");
 const cartManager = new CartManager("./src/data/carts.json");
 
-//1) Ruta post que cree un carrillo nuevo.
+//1) Ruta post que cree un carrito nuevo.
 
 router.post("/", async (req, res) => {
   try {
