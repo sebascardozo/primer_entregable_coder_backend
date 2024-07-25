@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ProductManager = require("../managers/product-manager.js");
-const manager = new ProductManager("../src/data/products.json");
+const manager = new ProductManager("./src/data/products.json");
 
 //Listar todos los productos:
 

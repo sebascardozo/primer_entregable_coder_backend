@@ -17,10 +17,10 @@ router.post("/", async (req, res) => {
 //2) Listamos los productos de determinado carrito:
 
 router.get("/:cid", async (req, res) => {
-  let carritoId = parseInt(req.params.cid);
+  let cartId = parseInt(req.params.cid);
 
   try {
-    const carrito = await cartManager.getCartById(cartId);
+    const cart = await cartManager.getCartById(cartId);
     res.json(cart.products);
   } catch (error) {
     res.status(500).send("Error al obtener los productos del carrito");
@@ -34,12 +34,12 @@ router.post("/:cid/product/:pid", async (req, res) => {
   let quantity = req.body.quantity || 1;
 
   try {
-    const actualizado = await cartManager.addProductCart(
+    const upDated = await cartManager.addProductCart(
       cartId,
       productId,
       quantity
     );
-    res.json(actualizado.products);
+    res.json(upDated.products);
   } catch (error) {
     res.status(500).send("Error al agregar un producto, moriremos");
   }
