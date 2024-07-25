@@ -5,8 +5,6 @@ const manager = new ProductManager("./src/data/products.json");
 
 //Listar todos los productos:
 
-//Listar todos los productos:
-
 router.get("/", async (req, res) => {
   const arrayProducts = await manager.getProducts();
   res.send(arrayProducts);
@@ -38,6 +36,28 @@ router.delete("/:pid", async (req, res) => {
     res.send("Producto Eliminado");
   } catch (error) {
     res.send("Error al eliminar producto");
+    console.log(error);
+  }
+});
+
+//Metodo para Actualizar un producto en la lista const newProduct = {
+
+router.put("/:pid", async (req, res) => {
+  const pid = req.params.pid;
+  try {
+    const { title, description, price, img, code, stock } = req.body;
+
+    const response = await ProductManager.updateProduct(pid, {
+      title,
+      description,
+      price,
+      img,
+      code,
+      stock,
+    });
+    res.json(response);
+  } catch (error) {
+    res.send("Error al actualizar producto");
     console.log(error);
   }
 });
