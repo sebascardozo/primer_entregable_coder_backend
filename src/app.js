@@ -19,6 +19,7 @@ app.set("views", "./src/views");
 //Rutas
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/", viewsRouter);
 
 app.listen(PUERTO, () => {
   console.log(`Escuchando en el http://localhost:${PUERTO}`);
