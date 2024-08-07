@@ -5,16 +5,24 @@ const app = express();
 const PUERTO = 8080;
 const productsRouter = require("./routers/products.router.js");
 const cartsRouter = require("./routers/carts.router.js");
-import { engine } from "express-handlebars";
+import exphbs from "express-handlebars";
+import viewsRouter from "./routes/views.router.js";
 
 //Middleware:
 app.use(express.json());
 //Le decimos al servidor que vamos a trabajar con JSON.
 
-//Configuracion Express Handlebars
-app.engine("handlebars", engine());
+//Configuramos Express-Handlebars
+
+app.engine("handlebars", exphbs.engine());
+//Aca configuramos el motor de plantillas, le digo a experess que cuando encuentre un archivo con la extension .handlebars, lo renderice utilizando este motor.
+
 app.set("view engine", "handlebars");
+//Por ultimo, le decimos en donde se encuentran estos archivos con la extensión "handlebars"
 app.set("views", "./src/views");
+
+//Tus rutas
+app.use("/", viewsRouter);
 
 //Rutas
 app.use("/api/products", productsRouter);
