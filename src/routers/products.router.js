@@ -31,7 +31,7 @@ router.get("/:pid", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { title, description, price, img, code, stock } = req.body;
-    const response = await productManager.updateProduct([
+    const response = await ProductManager.updateProduct([
       title,
       description,
       price,

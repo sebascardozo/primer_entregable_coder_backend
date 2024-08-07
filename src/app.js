@@ -14,22 +14,20 @@ const socket = require("socket.io");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./src/public"));
-//Le decimos al servidor que vamos a trabajar con JSON.
 
 //Configuramos Express-Handlebars
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
+
 //Aca configuramos el motor de plantillas, le digo a experess que cuando encuentre un archivo con la extension .handlebars, lo renderice utilizando este motor.
 
 app.set("view engine", "handlebars");
 //Por ultimo, le decimos en donde se encuentran estos archivos con la extensión "handlebars"
 app.set("views", "./src/views");
 
-//Tus rutas
-app.use("/", viewsRouter);
-
 //Rutas
+app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
@@ -41,7 +39,7 @@ const httpServer = app.listen(PUERTO, () => {
 const io = socket(httpServer);
 
 const ProductManager = require("./managers/product-manager.js");
-const manager = new ProductManager("./src/data/productos.json");
+const manager = new ProductManager("./src/data/products.json");
 
 io.on("connection", async (socket) => {
   console.log("Un cliente se conectó");
