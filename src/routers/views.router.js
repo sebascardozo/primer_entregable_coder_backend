@@ -1,16 +1,16 @@
-import { Router } from "express";
-import { productManager } from "../app.js";
-
+const { Router } = require("express");
+const ProductManager = require("../managers/product-manager.js");
 const viewsRouter = Router();
+const router = Router();
 
 //Lista de todos los productos en la ruta /products
-viewsRouter.get("/products", async (req, res) => {
-  const productos = await productManager.getProducts();
-  res.render("home", { productos });
+router.get("/products", async (req, res) => {
+  const products = await manager.getProducts();
+
+  res.render("home", { products });
 });
 
-viewsRouter.get("/realtimeproducts", async (req, res) => {
-  res.render("realtimeproducts");
+router.get("/realtimeproducts", async (req, res) => {
+  res.render("realtimeProducts");
 });
-
-export { viewsRouter };
+module.exports = viewsRouter;

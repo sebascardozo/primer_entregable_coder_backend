@@ -5,8 +5,8 @@ const app = express();
 const PUERTO = 8080;
 const productsRouter = require("./routers/products.router.js");
 const cartsRouter = require("./routers/carts.router.js");
-import exphbs from "express-handlebars";
-import viewsRouter from "./routes/views.router.js";
+const viewsRouter = require("./routers/views.router.js");
+const { engine } = require("express-handlebars");
 
 //Middleware:
 app.use(express.json());
@@ -16,7 +16,8 @@ app.use(express.static("./src/public"));
 
 //Configuramos Express-Handlebars
 
-app.engine("handlebars", exphbs.engine());
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
 //Aca configuramos el motor de plantillas, le digo a experess que cuando encuentre un archivo con la extension .handlebars, lo renderice utilizando este motor.
 
 app.set("view engine", "handlebars");
