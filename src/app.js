@@ -10,6 +10,8 @@ import viewsRouter from "./routes/views.router.js";
 
 //Middleware:
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("./src/public"));
 //Le decimos al servidor que vamos a trabajar con JSON.
 
 //Configuramos Express-Handlebars
