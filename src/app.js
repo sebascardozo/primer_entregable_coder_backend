@@ -19,11 +19,6 @@ app.use(express.static("./src/public"));
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
-
-//Aca configuramos el motor de plantillas, le digo a experess que cuando encuentre un archivo con la extension .handlebars, lo renderice utilizando este motor.
-
-app.set("view engine", "handlebars");
-//Por ultimo, le decimos en donde se encuentran estos archivos con la extensión "handlebars"
 app.set("views", "./src/views");
 
 //Rutas
@@ -32,30 +27,32 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
+//Referencia al servidor
 const httpServer = app.listen(PUERTO, () => {
   console.log(`Escuchando en el http://localhost:${PUERTO}`);
 });
 
+//Instancio el Socket Server y por convencion la guardo en la contante io
 const io = socket(httpServer);
 
 const ProductManager = require("./managers/product-manager.js");
 const manager = new ProductManager("./src/data/products.json");
 
+//Comandos desde el BackEnd
 io.on("connection", async (socket) => {
-  console.log("Un cliente se conectó");
+  socket.on("message", (data) => {
+    console.log(`Nuevo cliente ${data}`);
+  });
 
-  // Enviar productos al cliente conectado
+  // Enviar productos al front
   socket.emit("productos", await manager.getProducts());
 
-  // Manejar eliminación de productos
-  socket.on("eliminarProducto", async (id) => {
-    try {
-      await manager.deleteProduct(id);
-      io.emit("productos", await manager.getProducts());
-      console.log("Producto eliminado y productos actualizados");
-    } catch (error) {
-      console.error("Error al eliminar el producto:", error);
-    }
+  //Recibo el Id del producto de front y lo elimino
+  socket.on("deleteProduct", async (productId) => {
+    console.log("Id recibido", productId);
+    ProductManager.deleteProduct(productId);
+    socket.emit("products", await ProductManager.getProducts());
+    console.log("Productos actualizados");
   });
 
   // Manejar adición de productos desde el formulario
