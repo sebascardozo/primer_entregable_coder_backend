@@ -1,21 +1,53 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
-const cartSchema = new mongoose.Schema({
-  products: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-      },
-    },
-  ],
+//definimos schema
+const productSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  stock: {
+    type: Number,
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: Boolean,
+    required: true,
+  },
+  thumbnails: {
+    type: [String],
+  },
 });
 
-const cartModel = mongoose.model("carts", cartSchema);
+productSchema.plugin(mongoosePaginate);
 
-module.exports = cartModel;
+//middleware
+
+productSchema.pre("findOne", function (next) {
+  this.populate(""); //aca debo poner los generos o donde se agrupe mis juegos
+  next();
+});
+
+//definimos el model
+
+const productosModel = mongoose.model("products", productSchema);
+
+module.exports = productosModel;
