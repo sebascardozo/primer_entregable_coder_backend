@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const CartManager = require("../managers/cart-manager.js");
-//const CartManager = require("../dao/db/cart-manager-db.js");
-const cartManager = new CartManager("./src/data/carts.json");
+const cartManager = require("../dao/db/cart-manager-db.js");
+const cartManager = new cartManager("./src/data/carts.json");
 
 //1) Ruta post que cree un carrito nuevo.
 
