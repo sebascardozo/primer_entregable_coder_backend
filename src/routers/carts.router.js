@@ -45,4 +45,59 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
+//actualizar la cantidad de un producto en un  carrito
+
+router.put("/:cid/products/:pid", async (req, res) => {
+  let cartId = req.params.cid;
+  let productId = req.params.pid;
+  let newQuantity = req.body.quantity;
+
+  if (!newQuantity || newQuantity <= 0) {
+    return res.status(400).send("Cantidad inválida");
+  }
+  try {
+    const cart = await cartManager.getCarritoById(cartId);
+    if (!cart) {
+      return res.status(404).send("Carrito no encontrado");
+    }
+    const existProduct = cart.products.find(
+      (item) => item.product.toString() === productId
+    );
+    if (existeProducto) {
+      existProduct.quantity = newQuantity;
+      cart.markModified("products");
+      await cart.save();
+      res.json(cart.products);
+    } else {
+      res.status(404).send("Producto no encontrado en el carrito");
+    }
+  } catch (error) {
+    console.error(
+      "Error al actualizar la cantidad del producto en el carrito:",
+      error.message
+    );
+    res.status(500).send("Error del servidor");
+  }
+});
+
+// Vaciar el carrito
+router.delete("/:cid", async (req, res) => {
+  let cartId = req.params.cid;
+
+  try {
+    const cart = await cartManager.getCartById(cartId);
+    if (!cart) {
+      return res.status(404).send("Carrito no encontrado");
+    }
+    cart.products = [];
+    cart.markModified("products");
+    await cart.save();
+
+    res.json({ message: "Carrito vacío exitosamente", carrito });
+  } catch (error) {
+    console.error("Error al vaciar el carrito:", error.message);
+    res.status(500).send("Error del servidor");
+  }
+});
+
 module.exports = router;
